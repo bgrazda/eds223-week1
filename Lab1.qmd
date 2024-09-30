@@ -1,0 +1,125 @@
+---
+title: "Week 1 Lab"
+format: html
+editor: visual
+---
+```{r}
+library(sf) # Vector Data
+library(tmap) # Map making
+library(here) # File paths
+library(stars) # Raster data
+```
+```{r}
+# Raster of global elevation
+world_elevation <- read_stars(here("data", "worldelevation.tif"))
+
+# Country boundaries
+world_vector <- read_sf(here("data", "worldvector.gpkg"))
+
+# Major cities
+world_cities <- read_sf(here("data", "worldcities.gpkg"))
+
+```
+
+```{r}
+tm_shape(world_elevation, bbox = c(-15, 35, 45, 65)) + # Decides the extent to which we are going to visualize, creates a zoom in around Europe
+  tm_raster() +
+tm_shape(world_vector) + 
+  tm_borders() 
+ # tm_shape(world_cities, is.master = TRUE) +
+ # tm_dots() 
+  
+tm_shape(world_elevation, bbox = world_cities) + # Decides the extent to which we are going to visualize, creates box around world cities but does not place the cities
+  tm_raster() +
+tm_shape(world_vector) + 
+  tm_borders() 
+```
+```{r}
+tm_shape(world_vector) +
+  tm_polygons(col = "lightblue",
+              border.col = "black",
+              lwd = 0.5,             #line width
+              lty = "dashed")       #line type
+```
+```{r}
+tm_shape(world_vector) +
+  tm_borders(col = "red") 
+```
+```{r}
+tm_shape(world_vector) +
+  tm_fill(col = "orange")
+```
+```{r}
+tm_shape(world_vector) +
+  tm_fill("CO2_emissions")
+```
+
+```{r}
+tm_shape(world_cities) +
+  tm_squares()
+```
+```{r}
+tm_shape(world_vector) +
+  tm_polygons("life_expectancy", 
+              palette = c("yellow", "darkgreen"),
+              title = "Life Expectancy (Years)")
+```
+```{r}
+library(viridisLite)
+
+tm_shape(world_vector) +
+  tm_polygons("life_expectancy",
+              palette = viridis(option = "mako", 8),
+              title = "Life Expectancy (years)")
+```
+```{r}
+tm_shape(world_vector) +
+  tm_polygons() +
+  tm_shape(world_cities) +
+  tm_symbols(size = "pop2020",
+             legend.size.is.portrait = TRUE)
+```
+
+```{r}
+tm_shape(world_vector) +
+  tm_fill() +
+  tm_graticules() # can flip the graticules before fill to see countries on top of graticules
+
+tm_shape(world_vector) +
+  tm_graticules() +
+  tm_fill()
+```
+```{r}
+tm_shape(world_vector) +
+  tm_fill() +
+  tm_scale_bar() +
+  tm_compass(position = c("left", "top"))
+```
+
+```{r}
+tmap_mode("view") 
+
+tm_shape(world_vector) +
+  tm_fill(col = "wb_income_region", 
+          palette = viridisLite::plasma(5), 
+          title = "Regional income") +
+  tm_layout(bg.color = "grey95",
+            main.title = "Global income by country",
+            frame = FALSE)
+
+
+```
+```{r}
+tmap_mode("plot")
+
+map1 <- tm_shape(world_vector) +
+  tm_fill(col = "wb_income_region", 
+          palette = viridisLite::plasma(5), 
+          title = "Regional income") +
+  tm_layout(bg.color = "grey95",
+            main.title = "Global income by country",
+            frame = FALSE)
+
+tmap_save(map1, here("tmap-example.png"))
+```
+
