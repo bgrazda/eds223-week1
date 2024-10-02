@@ -3,12 +3,14 @@ title: "Week 1 Lab"
 format: html
 editor: visual
 ---
+
 ```{r}
 library(sf) # Vector Data
 library(tmap) # Map making
 library(here) # File paths
 library(stars) # Raster data
 ```
+
 ```{r}
 # Raster of global elevation
 world_elevation <- read_stars(here("data", "worldelevation.tif"))
@@ -34,6 +36,7 @@ tm_shape(world_elevation, bbox = world_cities) + # Decides the extent to which w
 tm_shape(world_vector) + 
   tm_borders() 
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_polygons(col = "lightblue",
@@ -41,14 +44,17 @@ tm_shape(world_vector) +
               lwd = 0.5,             #line width
               lty = "dashed")       #line type
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_borders(col = "red") 
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_fill(col = "orange")
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_fill("CO2_emissions")
@@ -58,12 +64,14 @@ tm_shape(world_vector) +
 tm_shape(world_cities) +
   tm_squares()
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_polygons("life_expectancy", 
               palette = c("yellow", "darkgreen"),
               title = "Life Expectancy (Years)")
 ```
+
 ```{r}
 library(viridisLite)
 
@@ -72,6 +80,7 @@ tm_shape(world_vector) +
               palette = viridis(option = "mako", 8),
               title = "Life Expectancy (years)")
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_polygons() +
@@ -89,6 +98,7 @@ tm_shape(world_vector) +
   tm_graticules() +
   tm_fill()
 ```
+
 ```{r}
 tm_shape(world_vector) +
   tm_fill() +
@@ -109,6 +119,7 @@ tm_shape(world_vector) +
 
 
 ```
+
 ```{r}
 tmap_mode("plot")
 
@@ -122,4 +133,3 @@ map1 <- tm_shape(world_vector) +
 
 tmap_save(map1, here("tmap-example.png"))
 ```
-

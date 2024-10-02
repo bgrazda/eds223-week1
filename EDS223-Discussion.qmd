@@ -1,0 +1,69 @@
+---
+title: "Week 1 Discussion Activities"
+format: html
+editor: visual
+---
+
+```{r}
+library(here)
+library(tidyverse)
+library(stars)
+library(sf)
+library(tmap)
+```
+
+```{r}
+ei_points <- sf::read_sf(here::here("data", "easter_island", "ei_points.gpkg"))
+volcanoes <- subset(ei_points, type == "volcano")
+ei_elev <- stars::read_stars(here::here("data", "easter_island", "ei_elev.tif"))
+ei_borders <- sf::read_sf(here::here("data", "easter_island", "ei_border.gpkg"))
+ei_roads <- sf::read_sf(here::here("data", "easter_island", "ei_roads.gpkg"))
+```
+
+```{r}
+# Create a map of Easter Island
+tm_shape(ei_borders) +
+  tm_polygons()
+```
+```{r}
+tmap_mode("plot")
+
+tm_shape(ei_borders) +
+  tm_borders() + 
+  tm_shape(ei_elev) +
+  tm_raster(palette = viridisLite::cividis(7),
+            title = "Elevation") +
+  tm_shape(ei_roads) +
+  tm_lines(col = "white") +
+  tm_shape(volcanoes) +
+  tm_symbols(shape = 2, 
+             size = .2, 
+             col = "red",
+             border.lwd = 2
+             ) +
+  tm_compass(position = "right") +
+  tm_scale_bar() 
+
+```
+```{r}
+tmap_mode("view")
+
+tm_shape(ei_borders) +
+  tm_borders() + 
+  tm_shape(ei_elev) +
+  tm_raster(palette = viridisLite::cividis(7),
+            title = "Elevation") +
+  tm_shape(ei_roads) +
+  tm_lines(col = "white") +
+  tm_shape(volcanoes) +
+  tm_symbols(shape = 2, 
+             size = .2, 
+             col = "red",
+             border.lwd = 2) +
+  tm_compass() +
+  tm_scale_bar()  
+ 
+```
+
+
+
